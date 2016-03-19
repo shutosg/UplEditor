@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+  <header>
+    <title>test</title>
+    <date>2016/02/26 18:18:52</date>
+    <version>1.1</version>
+  </header>
+  <main>
+    <list number="1" play="enable">
+      <volume>0</volume>
+      <folder>1</folder>
+      <take>-1</take>
+      <name>gray_3840</name>
+      <in>0</in>
+      <out>10</out>
+      <loop>12</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="2" play="enable">
+      <volume>0</volume>
+      <folder>0</folder>
+      <take>-1</take>
+      <name>008_cracker_40_6</name>
+      <in>60</in>
+      <out>840</out>
+      <loop>1</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="3" play="enable">
+      <volume>0</volume>
+      <folder>1</folder>
+      <take>-1</take>
+      <name>gray_3840</name>
+      <in>0</in>
+      <out>10</out>
+      <loop>12</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo>コメントてすと</memo>
+    </list>
+    <list number="4" play="enable">
+      <volume>0</volume>
+      <folder>93</folder>
+      <take>-1</take>
+      <name>008_cracker_15_5</name>
+      <in>60</in>
+      <out>840</out>
+      <loop>1</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="5" play="enable">
+      <volume>0</volume>
+      <folder>1</folder>
+      <take>-1</take>
+      <name>gray_3840</name>
+      <in>0</in>
+      <out>10</out>
+      <loop>12</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="6" play="enable">
+      <volume>0</volume>
+      <folder>101</folder>
+      <take>-1</take>
+      <name>008_cracker_40_5</name>
+      <in>60</in>
+      <out>840</out>
+      <loop>1</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="7" play="enable">
+      <volume>0</volume>
+      <folder>1</folder>
+      <take>-1</take>
+      <name>gray_3840</name>
+      <in>0</in>
+      <out>10</out>
+      <loop>12</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="8" play="enable">
+      <volume>0</volume>
+      <folder>91</folder>
+      <take>-1</take>
+      <name>008_cracker_15_3</name>
+      <in>60</in>
+      <out>840</out>
+      <loop>1</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="9" play="enable">
+      <volume>0</volume>
+      <folder>1</folder>
+      <take>-1</take>
+      <name>gray_3840</name>
+      <in>0</in>
+      <out>10</out>
+      <loop>12</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="10" play="enable">
+      <volume>0</volume>
+      <folder>100</folder>
+      <take>-1</take>
+      <name>008_cracker_40_4</name>
+      <in>60</in>
+      <out>840</out>
+      <loop>1</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="11" play="enable">
+      <volume>0</volume>
+      <folder>1</folder>
+      <take>-1</take>
+      <name>gray_3840</name>
+      <in>0</in>
+      <out>10</out>
+      <loop>12</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="12" play="enable">
+      <volume>0</volume>
+      <folder>99</folder>
+      <take>-1</take>
+      <name>008_cracker_40_3</name>
+      <in>60</in>
+      <out>840</out>
+      <loop>1</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="13" play="enable">
+      <volume>0</volume>
+      <folder>1</folder>
+      <take>-1</take>
+      <name>gray_3840</name>
+      <in>0</in>
+      <out>10</out>
+      <loop>12</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="14" play="enable">
+      <volume>0</volume>
+      <folder>92</folder>
+      <take>-1</take>
+      <name>008_cracker_15_4</name>
+      <in>60</in>
+      <out>840</out>
+      <loop>1</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="15" play="enable">
+      <volume>0</volume>
+      <folder>1</folder>
+      <take>-1</take>
+      <name>gray_3840</name>
+      <in>0</in>
+      <out>10</out>
+      <loop>12</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="16" play="enable">
+      <volume>0</volume>
+      <folder>94</folder>
+      <take>-1</take>
+      <name>008_cracker_15_6</name>
+      <in>60</in>
+      <out>840</out>
+      <loop>1</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+    <list number="17" play="enable">
+      <volume>0</volume>
+      <folder>1</folder>
+      <take>-1</take>
+      <name>gray_3840</name>
+      <in>0</in>
+      <out>10</out>
+      <loop>12</loop>
+      <speed>1.0</speed>
+      <reverse>off</reverse>
+      <memo></memo>
+    </list>
+  </main>
+</root>
