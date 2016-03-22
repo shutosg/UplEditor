@@ -4,7 +4,7 @@ var UplEditor = function (_uplFile) {
 	self.dom = self.xmlToDom(self.uplFile);
 	self.xml = self.domToXml(self.dom);
 	self.lists = [], self.sets = [], self.BpicNames = [], self.ApicNames = [];
-	self.root;
+	self.root, self.exDom;
 	
 	$(function(){
 		$(self.dom).find("list").each(function(){
@@ -24,14 +24,37 @@ var UplEditor = function (_uplFile) {
 		for (var j=0; j<self.params.bitrate.length; j++) {
 			for (var k=0; k<self.params.encParam.length; k++) {
 				self.BpicNames[i*9+j*3+k] = "B_" + self.params.type[i] + "_" + self.params.bitrate[j] + "_" + self.params.encParam[k];
-				//self.sets[i*9+j*3+k] = [];
+				//var a = self.grayImage.clone
+				$(function(){
+					var a = $(self.grayImage).clone(true);
+					a.find("name")[0].innerHTML = self.ApicNames[i];
+					var b = $(self.grayImage).clone(true);
+					b.find("name")[0].innerHTML = self.BpicNames[i*9+j*3+k];
+					self.sets[i*9+j*3+k] = [self.grayImage, a, self.grayImage, b, self.grayImage, a, self.grayImage, b];
+				});
+				
 			}
 		}
 	}
+	for (var i=0; i<self.sets.length; i++) {
+		for (var j=0; j<self.sets[i].length; j++) {
+			$(function(){
+				self.lists[i*self.sets[i].length+j] = $(self.sets[i][j]).clone(false).attr("number", i*self.sets[i].length+j+1)[0];
+			});
+		}
+	}
+	$(function(){
+		self.exDom = $(self.xmlToDom(self.template)).clone(false)[0];
+		$(self.exDom).find("list").remove();
+		for (var i=0; i<self.lists.length; i++) {
+			$(self.exDom).find("main").append(self.lists[i]);
+			
+		}
+	});
 };
 
-UplEditor.prototype.readFile = function (_uplFile) {
-	//
+UplEditor.prototype.makeSetsFromParams = function (params) {
+	
 };
 
 UplEditor.prototype.xmlToDom = function (xml) {
@@ -55,11 +78,34 @@ UplEditor.prototype.downloadXml = function (_xml, _name){
     a.dispatchEvent(new CustomEvent('click'));
 };
 
-UplEditor.prototype.template = '<?xml version="1.0" encoding="UTF-8"?><root><header><title></title><date></date><version>1.1</version></header><main><list number="1" play="enable"><volume>0</volume><folder>1</folder><take>1</take><name>gray_3840</name><in>0</in><out>10</out><loop>12</loop><speed>1.0</speed><reverse>off</reverse><memo/></list></main></root>';
+UplEditor.prototype.template = 
+	'<?xml version="1.0" encoding="UTF-8"?>\n' +
+	'<root>\n' +
+	'	<header>\n' +
+	'		<title>template</title>\n' + 
+	'		<date>2016/03/22 12:00:00</date>\n' +
+	'		<version>1.1</version>\n' +
+	'	</header>\n' +
+	'	<main>\n' +
+	'		<list number="1" play="enable">\n' +
+	'			<volume>0</volume>\n' +
+	'			<folder>1</folder>\n' +
+	'			<take>1</take>\n' +
+	'			<name>gray_3840</name>\n' +
+	'			<in>0</in>\n' +
+	'			<out>10</out>\n' +
+	'			<loop>12</loop>\n' +
+	'			<speed>1.0</speed>\n' +
+	'			<reverse>off</reverse>\n' +
+	'			<memo/>\n' +
+	'		</list>\n' +
+	'	</main>\n' +
+	'</root>';
 
 $(function(){
 	UplEditor.prototype.grayImage = $(UplEditor.prototype.xmlToDom(UplEditor.prototype.template)).find("list")[0];
 });
+
 
 UplEditor.prototype.setVal = function (_dom, _name, _val) {
 	$(function(){

@@ -20,3 +20,7 @@ function readFile(e) {
     var file = e.target.result;
 	uplEditor = new UplEditor(file);
 }
+
+document.getElementById("dl_upl").addEventListener("click", function(){
+	uplEditor.downloadXml(uplEditor.domToXml(uplEditor.exDom), "output.upl");
+}, false);

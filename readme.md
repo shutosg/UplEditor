@@ -31,3 +31,8 @@ Aは原画、Bは評価対象．
  - domを編集してxml書き出しをすると改行が死んで最初の1行も消える
  	- 改行が死ぬのはuplEditor.templateの書き方が悪かった
  - ...
+
+# まだの機能
+ - タイトル以外の値の変更
+ 	- loop、in、out、などがtemplateのgray_imageから取ってきたまま
+ - GUI
