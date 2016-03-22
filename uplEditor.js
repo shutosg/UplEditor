@@ -4,7 +4,6 @@ var UplEditor = function (_uplFile) {
 	it.dom = it.xmlToDom(it.uplFile);
 	it.xml = it.domToXml(it.dom);
 	it.lists = [], it.sets = [], it.BpicNames = [], it.ApicNames = [];
-	it.root, it.exDom;
 	
 	$(function(){
 		$(it.dom).find("list").each(function(){
@@ -13,25 +12,9 @@ var UplEditor = function (_uplFile) {
 		it.root = $(it.dom).find("root")[0];
 	});
 	
-	var paramsA = {
-		"sequence": ["008_cracker", "011_children", "012_farm"],
-		"in": [60, 100, 110],
-		"out": [840, 900, 910],
-		"loop": [1, 1, 1],
-		"folder": [2, 3, 4]
-	};
+	var params = it.getParamsFromUplFile();
 	
-	var paramsB = {
-		"bitrate": ["15M", "20M", "40M"],
-		"encParam": [3, 5, 6],
-		"folder": [
-			[[5, 6, 7], [8, 9, 10], [11, 12, 13]], //folders for sequence 1
-			[[14, 15, 16], [17, 18, 19], [20, 21, 22]], //folders for sequence 2
-			[[23, 24, 25], [26, 27, 28], [29, 30, 31]] // folders for sequence 3
-		]
-	};
-	
-	var sets = it.makeSetsFromParams(paramsA, paramsB);
+	var sets = it.makeSetsFromParams(params);
 	var exLists = it.makeListsFromSets(sets);
 	it.exDom = it.makeDomFromLists(exLists);
 	it.setTime();
@@ -68,7 +51,9 @@ UplEditor.prototype.getTimeNow = function() {
 	return Y + "/" + M + "/" + D + " " + h + ":" + m + ":" + s;
 };
 
-UplEditor.prototype.makeSetsFromParams = function (paramsA, paramsB) {
+UplEditor.prototype.makeSetsFromParams = function (params) {
+	var paramsA = params.paramsA;
+	var paramsB = params.paramsB;
 	var it = this;
 	var sets = [], ApicNames = [], BpicNames = [];
 	for (var i=0, typeLen=paramsA.sequence.length; i<typeLen; i++) {
@@ -169,9 +154,35 @@ UplEditor.prototype.template =
 	'			<speed>1.0</speed>\n' +
 	'			<reverse>off</reverse>\n' +
 	'			<memo/>\n' +
-	'		</list>\n' +
+	'		</list>' +
 	'	</main>\n' +
 	'</root>';
+
+UplEditor.prototype.defaultParams = {
+	"paramsA" : {
+		"sequence": ["008_cracker", "011_children", "012_farm"],
+		"in": [60, 100, 110],
+		"out": [840, 900, 910],
+		"loop": [1, 1, 1],
+		"folder": [2, 3, 4]
+	},
+	"paramsB" : {
+		"bitrate": ["15M", "20M", "40M"],
+		"encParam": [3, 5, 6],
+		"folder": [
+			[[5, 6, 7], [8, 9, 10], [11, 12, 13]], //folders for sequence 1
+			[[14, 15, 16], [17, 18, 19], [20, 21, 22]], //folders for sequence 2
+			[[23, 24, 25], [26, 27, 28], [29, 30, 31]] // folders for sequence 3
+		]
+	}
+};
+
+UplEditor.prototype.getParamsFromUplFile = function() {
+	var it = this;
+	var paramsA = it.defaultParams.paramsA;
+	var paramsB = it.defaultParams.paramsB;
+	return {"paramsA": paramsA, "paramsB": paramsB};
+};
 
 $(function(){
 	UplEditor.prototype.grayImage = $(UplEditor.prototype.xmlToDom(UplEditor.prototype.template)).find("list")[0];
