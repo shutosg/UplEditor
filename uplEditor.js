@@ -117,9 +117,11 @@ UplEditor.prototype.makeDomFromLists = function (lists) {
 	var dom, it = this;
 	$(function(){
 		dom = $(it.xmlToDom(it.template)).clone(false)[0];
-		$(dom).find("list").remove();
+		$(dom).find("main").text("");
+		$(dom).find("main").append("\n\t\t");
 		for (var i=0, len=lists.length; i<len; i++) {
 			$(dom).find("main").append(lists[i]);
+			$(dom).find("main").append(i==len-1?"\n\t":"\n\t\t");
 		}
 	});
 	return dom;
