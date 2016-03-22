@@ -34,10 +34,31 @@ var UplEditor = function (_uplFile) {
 	var sets = it.makeSetsFromParams(paramsA, paramsB);
 	var exLists = it.makeListsFromSets(sets);
 	it.exDom = it.makeDomFromLists(exLists);
-	
+	it.setTime();
 };
 
+UplEditor.prototype.setTime = function() {
+	var it = this;
+	$(function(){
+		$(it.exDom).find("date").text(it.getTimeNow());
+	});
+}
 
+UplEditor.prototype.getTimeNow = function() {
+	var date = new Date();
+	var Y = date.getFullYear();
+	var M = date.getMonth();
+	M = M<10?"0"+M:M;
+	var D = date.getDay();
+	D = D<10?"0"+D:D;
+	var h = date.getHours();
+	h = h<10?"0"+h:h;
+	var m = date.getMinutes();
+	m = m<10?"0"+m:m;
+	var s= date.getSeconds();
+	s = s<10?"0"+s:s;
+	return Y + "/" + M + "/" + D + " " + h + ":" + m + ":" + s;
+}
 
 UplEditor.prototype.makeSetsFromParams = function (paramsA, paramsB) {
 	var it = this;
@@ -52,17 +73,17 @@ UplEditor.prototype.makeSetsFromParams = function (paramsA, paramsB) {
 				var gi = it.grayImage;
 				$(function(){
 					var a = $(gi).clone(false);
-					a.find("name")[0].innerHTML = ApicNames[i];
-					a.find("in")[0].innerHTML = paramsA.in[i] || a.find("in")[0].innerHTML;
-					a.find("out")[0].innerHTML = paramsA.out[i] || a.find("out")[0].innerHTML;
-					a.find("folder")[0].innerHTML = paramsA.folder[i] || a.find("folder")[0].innerHTML;
-					a.find("loop")[0].innerHTML = paramsA.loop[i] || a.find("loop")[0].innerHTML;
+					a.find("name").text(ApicNames[i]);
+					a.find("in").text(paramsA.in[i] || a.find("in").text());
+					a.find("out").text(paramsA.out[i] || a.find("out").text());
+					a.find("folder").text(paramsA.folder[i] || a.find("folder").text());
+					a.find("loop").text(paramsA.loop[i] || a.find("loop").text());
 					var b = $(gi).clone(false);
-					b.find("name")[0].innerHTML = BpicNames[l];
-					b.find("in")[0].innerHTML = paramsA.in[i] || b.find("in")[0].innerHTML;
-					b.find("out")[0].innerHTML = paramsA.out[i] || b.find("out")[0].innerHTML;
-					b.find("folder")[0].innerHTML = paramsB.folder[i][j][k] || b.find("folder")[0].innerHTML;
-					b.find("loop")[0].innerHTML = paramsA.loop[i] || b.find("loop")[0].innerHTML;
+					b.find("name").text(BpicNames[l]);
+					b.find("in").text(paramsA.in[i] || b.find("in").text());
+					b.find("out").text(paramsA.out[i] || b.find("out").text());
+					b.find("folder").text(paramsB.folder[i][j][k] || b.find("folder").text());
+					b.find("loop").text(paramsA.loop[i] || b.find("loop").text());
 					sets[l] = [gi, a, gi, b, gi, a, gi, b];
 				});
 				
@@ -151,6 +172,6 @@ $(function(){
 
 UplEditor.prototype.setVal = function (_dom, _name, _val) {
 	$(function(){
-		$(_dom).find(_name)[0].innerHTML = _val;
+		$(_dom).find(_name).text() = _val;
 	});
 };
