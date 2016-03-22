@@ -14,13 +14,13 @@ input_file.onchange = function() {
     file_reader.readAsText(file);
 };
 
-var uplEditor;
+var ue;
 
 function readFile(e) {
     var file = e.target.result;
-	uplEditor = new UplEditor(file);
+	ue = new UplEditor(file);
 }
 
 document.getElementById("dl_upl").addEventListener("click", function(){
-	uplEditor.downloadXml(uplEditor.domToXml(uplEditor.exDom), "output.upl");
+	ue.downloadXml(ue.domToXml(ue.exDom), "output.upl");
 }, false);

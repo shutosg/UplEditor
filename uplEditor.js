@@ -1,60 +1,99 @@
 var UplEditor = function (_uplFile) {
-	var self = this;
-	self.uplFile = _uplFile;
-	self.dom = self.xmlToDom(self.uplFile);
-	self.xml = self.domToXml(self.dom);
-	self.lists = [], self.sets = [], self.BpicNames = [], self.ApicNames = [];
-	self.root, self.exDom;
+	var it = this;
+	it.uplFile = _uplFile;
+	it.dom = it.xmlToDom(it.uplFile);
+	it.xml = it.domToXml(it.dom);
+	it.lists = [], it.sets = [], it.BpicNames = [], it.ApicNames = [];
+	it.root, it.exDom;
 	
 	$(function(){
-		$(self.dom).find("list").each(function(){
-			self.lists.push($(this)[0]);
+		$(it.dom).find("list").each(function(){
+			it.lists.push($(this)[0]);
 		});
-		self.root = $(self.dom).find("root")[0];
+		it.root = $(it.dom).find("root")[0];
 	});
 	
-	self.params = {
-		"type": [1, 2, 3],
-		"bitrate": ["15M", "20M", "40M"],
-		"encParam": [3, 5, 6]
+	var paramsA = {
+		"sequence": ["008_cracker", "011_children", "012_farm"],
+		"in": [60, 100, 110],
+		"out": [840, 900, 910],
+		"loop": [1, 1, 1],
+		"folder": [2, 3, 4]
 	};
 	
-	for (var i=0; i<self.params.type.length; i++) {
-		self.ApicNames[i] = "A_" + self.params.type[i];
-		for (var j=0; j<self.params.bitrate.length; j++) {
-			for (var k=0; k<self.params.encParam.length; k++) {
-				self.BpicNames[i*9+j*3+k] = "B_" + self.params.type[i] + "_" + self.params.bitrate[j] + "_" + self.params.encParam[k];
-				//var a = self.grayImage.clone
+	var paramsB = {
+		"bitrate": ["15M", "20M", "40M"],
+		"encParam": [3, 5, 6],
+		"folder": [
+			[[5, 6, 7], [8, 9, 10], [11, 12, 13]], //folders for sequence 1
+			[[14, 15, 16], [17, 18, 19], [20, 21, 22]], //folders for sequence 2
+			[[23, 24, 25], [26, 27, 28], [29, 30, 31]] // folders for sequence 3
+		]
+	};
+	
+	var sets = it.makeSetsFromParams(paramsA, paramsB);
+	var exLists = it.makeListsFromSets(sets);
+	it.exDom = it.makeDomFromLists(exLists);
+	
+};
+
+
+
+UplEditor.prototype.makeSetsFromParams = function (paramsA, paramsB) {
+	var it = this;
+	var sets = [], ApicNames = [], BpicNames = [];
+	for (var i=0, typeLen=paramsA.sequence.length; i<typeLen; i++) {
+		ApicNames[i] = "A_" + paramsA.sequence[i];
+		for (var j=0, brLen=paramsB.bitrate.length; j<brLen; j++) {
+			for (var k=0, epLen=paramsB.encParam.length; k<epLen; k++) {
+				var l = i*brLen*epLen+j*epLen+k;
+				BpicNames[l] = "B_" + paramsA.sequence[i] + "_" + paramsB.bitrate[j] + "_" + paramsB.encParam[k];
+				
+				var gi = it.grayImage;
 				$(function(){
-					var a = $(self.grayImage).clone(true);
-					a.find("name")[0].innerHTML = self.ApicNames[i];
-					var b = $(self.grayImage).clone(true);
-					b.find("name")[0].innerHTML = self.BpicNames[i*9+j*3+k];
-					self.sets[i*9+j*3+k] = [self.grayImage, a, self.grayImage, b, self.grayImage, a, self.grayImage, b];
+					var a = $(gi).clone(false);
+					a.find("name")[0].innerHTML = ApicNames[i];
+					a.find("in")[0].innerHTML = paramsA.in[i] || a.find("in")[0].innerHTML;
+					a.find("out")[0].innerHTML = paramsA.out[i] || a.find("out")[0].innerHTML;
+					a.find("folder")[0].innerHTML = paramsA.folder[i] || a.find("folder")[0].innerHTML;
+					a.find("loop")[0].innerHTML = paramsA.loop[i] || a.find("loop")[0].innerHTML;
+					var b = $(gi).clone(false);
+					b.find("name")[0].innerHTML = BpicNames[l];
+					b.find("in")[0].innerHTML = paramsA.in[i] || b.find("in")[0].innerHTML;
+					b.find("out")[0].innerHTML = paramsA.out[i] || b.find("out")[0].innerHTML;
+					b.find("folder")[0].innerHTML = paramsB.folder[i][j][k] || b.find("folder")[0].innerHTML;
+					b.find("loop")[0].innerHTML = paramsA.loop[i] || b.find("loop")[0].innerHTML;
+					sets[l] = [gi, a, gi, b, gi, a, gi, b];
 				});
 				
 			}
 		}
 	}
-	for (var i=0; i<self.sets.length; i++) {
-		for (var j=0; j<self.sets[i].length; j++) {
+	return sets;
+};
+
+UplEditor.prototype.makeListsFromSets = function (sets) {
+	var lists = [], it = this;
+	for (var i=0, len1=sets.length; i<len1; i++) {
+		for (var j=0, len2=sets[i].length; j<len2; j++) {
 			$(function(){
-				self.lists[i*self.sets[i].length+j] = $(self.sets[i][j]).clone(false).attr("number", i*self.sets[i].length+j+1)[0];
+				lists[i*len2+j] = $(sets[i][j]).clone(false).attr("number", i*len2+j+1)[0];
 			});
 		}
 	}
-	$(function(){
-		self.exDom = $(self.xmlToDom(self.template)).clone(false)[0];
-		$(self.exDom).find("list").remove();
-		for (var i=0; i<self.lists.length; i++) {
-			$(self.exDom).find("main").append(self.lists[i]);
-			
-		}
-	});
+	return lists;
 };
 
-UplEditor.prototype.makeSetsFromParams = function (params) {
-	
+UplEditor.prototype.makeDomFromLists = function (lists) {
+	var dom, it = this;
+	$(function(){
+		dom = $(it.xmlToDom(it.template)).clone(false)[0];
+		$(dom).find("list").remove();
+		for (var i=0, len=lists.length; i<len; i++) {
+			$(dom).find("main").append(lists[i]);
+		}
+	});
+	return dom;
 };
 
 UplEditor.prototype.xmlToDom = function (xml) {
@@ -66,6 +105,8 @@ UplEditor.prototype.xmlToDom = function (xml) {
 UplEditor.prototype.domToXml = function (dom) {
 	var serializer = new XMLSerializer();
 	var textXml = serializer.serializeToString(dom);
+	if (!textXml.match(/^'<\?xml version="1.0" encoding="UTF-8"\?>'/))
+		textXml = '<?xml version="1.0" encoding="UTF-8"?>\n' + textXml;
 	return textXml;
 };
 
@@ -78,6 +119,7 @@ UplEditor.prototype.downloadXml = function (_xml, _name){
     a.dispatchEvent(new CustomEvent('click'));
 };
 
+UplEditor.prototype.xmlFirstLine = '<?xml version="1.0" encoding="UTF-8"?>\n';
 UplEditor.prototype.template = 
 	'<?xml version="1.0" encoding="UTF-8"?>\n' +
 	'<root>\n' +
@@ -90,7 +132,7 @@ UplEditor.prototype.template =
 	'		<list number="1" play="enable">\n' +
 	'			<volume>0</volume>\n' +
 	'			<folder>1</folder>\n' +
-	'			<take>1</take>\n' +
+	'			<take>-1</take>\n' +
 	'			<name>gray_3840</name>\n' +
 	'			<in>0</in>\n' +
 	'			<out>10</out>\n' +
