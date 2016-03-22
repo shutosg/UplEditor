@@ -35,6 +35,7 @@ var UplEditor = function (_uplFile) {
 	var exLists = it.makeListsFromSets(sets);
 	it.exDom = it.makeDomFromLists(exLists);
 	it.setTime();
+	it.setTitle("実験用プレイリスト");
 };
 
 UplEditor.prototype.setTime = function() {
@@ -42,7 +43,14 @@ UplEditor.prototype.setTime = function() {
 	$(function(){
 		$(it.exDom).find("date").text(it.getTimeNow());
 	});
-}
+};
+
+UplEditor.prototype.setTitle = function(_title) {
+	var it = this;
+	$(function(){
+		$(it.exDom).find("title").text(_title);
+	});
+};
 
 UplEditor.prototype.getTimeNow = function() {
 	var date = new Date();
@@ -58,7 +66,7 @@ UplEditor.prototype.getTimeNow = function() {
 	var s= date.getSeconds();
 	s = s<10?"0"+s:s;
 	return Y + "/" + M + "/" + D + " " + h + ":" + m + ":" + s;
-}
+};
 
 UplEditor.prototype.makeSetsFromParams = function (paramsA, paramsB) {
 	var it = this;
