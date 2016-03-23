@@ -1,6 +1,6 @@
 var UplEditor = function (_uplFile) {
 	var it = this;
-	it.uplFile = _uplFile;
+	it.uplFile = _uplFile||it.template;
 	it.dom = it.xmlToDom(it.uplFile);
 	it.xml = it.domToXml(it.dom);
 	it.lists = [], it.sets = [], it.BpicNames = [], it.ApicNames = [];
@@ -17,6 +17,9 @@ var UplEditor = function (_uplFile) {
 	var sets = it.makeSetsFromParams(params);
 	var exLists = it.makeListsFromSets(sets);
 	it.exDom = it.makeDomFromLists(exLists);
+	
+	var randomList = it.randomize(it.exDom.getElementsByTagName("list"), "variable2");
+	it.exDom = it.makeDomFromLists(randomList);
 	it.setTime();
 	it.setTitle("実験用プレイリスト");
 };
@@ -91,10 +94,12 @@ UplEditor.prototype.makeListsFromSets = function (sets) {
 	for (var i=0, len1=sets.length; i<len1; i++) {
 		for (var j=0, len2=sets[i].length; j<len2; j++) {
 			$(function(){
-				lists[i*len2+j] = $(sets[i][j]).clone(false).attr("number", i*len2+j+1)[0];
+				//lists[i*len2+j] = $(sets[i][j]).clone(false)[0];
+				lists.push($(sets[i][j]).clone(false)[0]);
 			});
 		}
 	}
+	console.log(lists);
 	return lists;
 };
 
@@ -105,12 +110,40 @@ UplEditor.prototype.makeDomFromLists = function (lists) {
 		$(dom).find("main").text("");
 		$(dom).find("main").append("\n\t\t");
 		for (var i=0, len=lists.length; i<len; i++) {
-			$(dom).find("main").append(lists[i]);
+			$(dom).find("main").append($(lists[i]).attr("number", i+1)[0]);
 			$(dom).find("main").append(i==len-1?"\n\t":"\n\t\t");
 		}
 	});
 	return dom;
 };
+
+UplEditor.prototype.randomize = function(lists, type) {
+	// listsとEBU法の種類を投げるとlistsを並び替えてreturnしてくれる
+	if (type == "variable1"||type == "Variable1") {
+		type = "v1";
+	} else if (type == "variable2"||type == "Variable2") {
+		type = "v2";
+	} else {
+		console.error("EBU Type is invalid!");
+		return;
+	}
+	var it = this;
+	var tmpSet = [], sets = [], newSets = [];
+	
+	
+	for (var i=0, len=lists.length; i<len; i++) {
+		tmpSet.push(lists[i]);
+		if ((type=="v2")?(i%8 == 7):(i%4 == 3)) {
+			sets.push(tmpSet);
+			tmpSet = [];
+		}
+	}
+	
+	while (sets.length > 0) {
+		newSets.push(sets.splice(parseInt(Math.random()*sets.length), 1)[0]);
+	}
+	return it.makeListsFromSets(newSets);
+}
 
 UplEditor.prototype.xmlToDom = function (xml) {
 	var parser = new DOMParser();
