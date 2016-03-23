@@ -16,26 +16,21 @@ var UplEditor = function (_uplFile) {
 	
 	var sets = it.makeSetsFromParams(params);
 	var exLists = it.makeListsFromSets(sets);
-	it.exDom = it.makeDomFromLists(exLists);
+	//it.exDom = it.makeDomFromLists(exLists);
 	
-	var randomList = it.randomize(it.exDom.getElementsByTagName("list"), "variable2");
+	var randomList = it.randomize(exLists, "variable2");
 	it.exDom = it.makeDomFromLists(randomList);
-	it.setTime();
-	it.setTitle("実験用プレイリスト");
+	it.setTime(it.exDom);
+	it.setTitle(it.exDom, "実験用プレイリスト");
 };
 
-UplEditor.prototype.setTime = function() {
+UplEditor.prototype.setTime = function(dom) {
 	var it = this;
-	$(function(){
-		$(it.exDom).find("date").text(it.getTimeNow());
-	});
+	dom.getElementsByTagName("date")[0].innerHTML = it.getTimeNow();
 };
 
-UplEditor.prototype.setTitle = function(_title) {
-	var it = this;
-	$(function(){
-		$(it.exDom).find("title").text(_title);
-	});
+UplEditor.prototype.setTitle = function(dom, title) {
+	dom.getElementsByTagName("title")[0].innerHTML = title;
 };
 
 UplEditor.prototype.getTimeNow = function() {
@@ -129,7 +124,6 @@ UplEditor.prototype.randomize = function(lists, type) {
 	}
 	var it = this;
 	var tmpSet = [], sets = [], newSets = [];
-	
 	
 	for (var i=0, len=lists.length; i<len; i++) {
 		tmpSet.push(lists[i]);
