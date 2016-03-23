@@ -50,6 +50,8 @@ UplEditor.prototype.getTimeNow = function() {
 };
 
 UplEditor.prototype.makeSetsFromParams = function (params) {
+	// paramsオブジェクトからセットのarrayを作成してreturnする
+	// sets配列には各listのDOM要素が格納されている
 	var paramsA = params.paramsA;
 	var paramsB = params.paramsB;
 	var it = this;
@@ -85,6 +87,7 @@ UplEditor.prototype.makeSetsFromParams = function (params) {
 };
 
 UplEditor.prototype.makeListsFromSets = function (sets) {
+	// sets配列からlists配列に入れ替え。
 	var lists = [], it = this;
 	for (var i=0, len1=sets.length; i<len1; i++) {
 		for (var j=0, len2=sets[i].length; j<len2; j++) {
@@ -99,6 +102,7 @@ UplEditor.prototype.makeListsFromSets = function (sets) {
 };
 
 UplEditor.prototype.makeDomFromLists = function (lists) {
+	// lists配列からDOM要素（Document）を返す
 	var dom, it = this;
 	$(function(){
 		dom = $(it.xmlToDom(it.template)).clone(false)[0];
@@ -140,12 +144,14 @@ UplEditor.prototype.randomize = function(lists, type) {
 }
 
 UplEditor.prototype.xmlToDom = function (xml) {
+	//生のxmlテキストファイルからDOM要素を生成してreturn
 	var parser = new DOMParser();
     var dom = parser.parseFromString(xml, 'text/xml');
 	return dom;
 };
 
 UplEditor.prototype.domToXml = function (dom) {
+	//DOMからxmlを書き出してくれる
 	var serializer = new XMLSerializer();
 	var textXml = serializer.serializeToString(dom);
 	if (!textXml.match(/^'<\?xml version="1.0" encoding="UTF-8"\?>'/))
@@ -188,12 +194,13 @@ UplEditor.prototype.template =
 	'</root>';
 
 UplEditor.prototype.defaultParams = {
+	// パラメータセット
 	"paramsA" : {
-		"sequence": ["008_cracker", "011_children", "012_farm"],
-		"in": [60, 100, 110],
-		"out": [840, 900, 910],
-		"loop": [1, 1, 1],
-		"folder": [2, 3, 4]
+		"sequence": ["008_cracker", "011_children", "012_farm"], // シーケンスの名前
+		"in": [60, 100, 110],	// 各シーケンスのin
+		"out": [840, 900, 910], // 各シーケンスのout
+		"loop": [1, 1, 1], 		// 各シーケンスのloop回数
+		"folder": [2, 3, 4]  	// 各シーケンスの原画のfolder番号
 	},
 	"paramsB" : {
 		"bitrate": ["15M", "20M", "40M"],
@@ -207,6 +214,8 @@ UplEditor.prototype.defaultParams = {
 };
 
 UplEditor.prototype.getParamsFromUplFile = function() {
+	// 未完成
+	// 読み込んだuplファイルからparamsオブジェクトを生成したいけど正規表現とか駆使しないといけないから難しそう
 	var it = this;
 	var paramsA = it.defaultParams.paramsA;
 	var paramsB = it.defaultParams.paramsB;

@@ -37,7 +37,9 @@ Aは原画、Bは評価対象．
 ## issues
  - <del>domを編集してxml書き出しをすると改行が死んで最初の1行も消える</del>
  	- 改行が死ぬのはuplEditor.templateの書き方が悪かった
- - <del></del>
+ - <del>randomizeしたあとmakeListsFromSetsするとfor文のiが前回の続きの値からになる</del>
+ 	- randomizeの中身をjQuery使わないのに書き換えたらいけた
+ - 
 
 ## まだの機能
  - 既存のuplファイルを読み込んで並び替える
