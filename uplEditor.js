@@ -1,15 +1,15 @@
-var UplEditor = function (_uplFile) {
+var UplEditor = function (_uplFile, _variable) {
 	var it = this;
 	it.uplFile = _uplFile||it.template;
 	it.dom = it.xmlToDom(it.uplFile);
 	it.xml = it.domToXml(it.dom);
+	it.vType = _variable||"variable2";
 	it.lists = [], it.sets = [], it.BpicNames = [], it.ApicNames = [];
 	
 	$(function(){
 		$(it.dom).find("list").each(function(){
 			it.lists.push($(this)[0]);
 		});
-		it.root = $(it.dom).find("root")[0];
 	});
 	
 	var params = it.getParamsFromUplFile();
@@ -18,10 +18,12 @@ var UplEditor = function (_uplFile) {
 	var exLists = it.makeListsFromSets(sets);
 	//it.exDom = it.makeDomFromLists(exLists);
 	
-	var randomList = it.randomize(exLists, "variable2");
+	var randomList = it.randomize(exLists);
 	it.exDom = it.makeDomFromLists(randomList);
 	it.setTime(it.exDom);
 	it.setTitle(it.exDom, "実験用プレイリスト");
+	console.log("プレイリストが作成されました。")
+	console.log(it.exDom);
 };
 
 UplEditor.prototype.setTime = function(dom) {
@@ -57,11 +59,22 @@ UplEditor.prototype.makeSetsFromParams = function (params) {
 	var it = this;
 	var sets = [], ApicNames = [], BpicNames = [];
 	for (var i=0, typeLen=paramsA.sequence.length; i<typeLen; i++) {
-		ApicNames[i] = "A_" + paramsA.sequence[i];
+		ApicNames[i] = paramsA.sequence[i] + "_orig";
+		$(function(){
+			var org = $(gi).clone(false);
+			org.find("name").text(ApicNames[i]);
+			org.find("in").text(paramsA.in[i] || org.find("in").text());
+			org.find("out").text(paramsA.out[i] || org.find("out").text());
+			org.find("folder").text(paramsA.folder[i] || org.find("folder").text());
+			org.find("loop").text(paramsA.loop[i] || org.find("loop").text());
+			var pushArr = it.vType=="variable2"?[gi, org, gi, org, gi, org, gi, org]:[gi, org, gi, org];  // 原画同士の比較
+			sets.push(pushArr);
+		});
+		
 		for (var j=0, brLen=paramsB.bitrate.length; j<brLen; j++) {
 			for (var k=0, epLen=paramsB.encParam.length; k<epLen; k++) {
 				var l = i*brLen*epLen+j*epLen+k;
-				BpicNames[l] = "B_" + paramsA.sequence[i] + "_" + paramsB.bitrate[j] + "_" + paramsB.encParam[k];
+				BpicNames[l] = paramsA.sequence[i] + "_" + paramsB.bitrate[j] + "_" + paramsB.encParam[k];
 				
 				var gi = it.grayImage;
 				$(function(){
@@ -77,7 +90,8 @@ UplEditor.prototype.makeSetsFromParams = function (params) {
 					b.find("out").text(paramsA.out[i] || b.find("out").text());
 					b.find("folder").text(paramsB.folder[i][j][k] || b.find("folder").text());
 					b.find("loop").text(paramsA.loop[i] || b.find("loop").text());
-					sets[l] = [gi, a, gi, b, gi, a, gi, b];
+					var pushArr = it.vType=="variable2"?[gi, a, gi, b, gi, a, gi, b]:[gi, a, gi, b];
+					sets.push(pushArr);
 				});
 				
 			}
@@ -97,7 +111,6 @@ UplEditor.prototype.makeListsFromSets = function (sets) {
 			});
 		}
 	}
-	console.log(lists);
 	return lists;
 };
 
@@ -116,29 +129,24 @@ UplEditor.prototype.makeDomFromLists = function (lists) {
 	return dom;
 };
 
-UplEditor.prototype.randomize = function(lists, type) {
+UplEditor.prototype.randomize = function(lists) {
 	// listsとEBU法の種類を投げるとlistsを並び替えてreturnしてくれる
-	if (type == "variable1"||type == "Variable1") {
-		type = "v1";
-	} else if (type == "variable2"||type == "Variable2") {
-		type = "v2";
-	} else {
-		console.error("EBU Type is invalid!");
-		return;
-	}
 	var it = this;
-	var tmpSet = [], sets = [], newSets = [];
+	var tmpSet = [], sets1 = [], sets2 = [], sets3 = [], newSets = [];
 	
 	for (var i=0, len=lists.length; i<len; i++) {
 		tmpSet.push(lists[i]);
-		if ((type=="v2")?(i%8 == 7):(i%4 == 3)) {
-			sets.push(tmpSet);
+		if ((it.vType=="variable2")?(i%8 == 7):(i%4 == 3)) {
+			var tmpSets = (i<len/3?sets1:(i<len/3*2?sets2:sets3));
+			tmpSets.push(tmpSet);
 			tmpSet = [];
 		}
 	}
-	
-	while (sets.length > 0) {
-		newSets.push(sets.splice(parseInt(Math.random()*sets.length), 1)[0]);
+	var index = 0;
+	while (sets3.length > 0) {
+		var a = index++%3;
+		var pushedSets = a==0?sets1:(a==1?sets2:sets3);
+		newSets.push(pushedSets.splice(parseInt(Math.random()*pushedSets.length), 1)[0]);
 	}
 	return it.makeListsFromSets(newSets);
 }
@@ -196,22 +204,28 @@ UplEditor.prototype.template =
 UplEditor.prototype.defaultParams = {
 	// パラメータセット
 	"paramsA" : {
-		"sequence": ["008_cracker", "011_children", "012_farm"], // シーケンスの名前
-		"in": [60, 100, 110],	// 各シーケンスのin
-		"out": [840, 900, 910], // 各シーケンスのout
+		"sequence": ["008_cracker", "011_snow", "505_nebuta"], // シーケンスの名前
+		"in": [240, 240, 180],	// 各シーケンスのin
+		"out": [840, 840, 780], // 各シーケンスのout
 		"loop": [1, 1, 1], 		// 各シーケンスのloop回数
-		"folder": [2, 3, 4]  	// 各シーケンスの原画のfolder番号
+		"folder": [4, 97, 9]  	// 各シーケンスの原画のfolder番号
 	},
 	"paramsB" : {
-		"bitrate": ["15M", "20M", "40M"],
-		"encParam": [3, 5, 6],
-		"folder": [
+		"bitrate": ["15M", "20M", "30M"],
+		"encParam": [3, 6, "conv"],
+		/*"folder": [
 			[[5, 6, 7], [8, 9, 10], [11, 12, 13]], //folders for sequence 1
 			[[14, 15, 16], [17, 18, 19], [20, 21, 22]], //folders for sequence 2
 			[[23, 24, 25], [26, 27, 28], [29, 30, 31]] // folders for sequence 3
+		]*/
+		"folder": [// 15M       20M          30M
+			[[91, 94, 13], [11, 14, 16], [12, 15, 17]], //folders for sequence 1
+			[[95, 98, 92], [19, 20, 24], [21, 22, 93]], //folders for sequence 2
+			[[3, 8, 61], [86, 87, 90], [114, 115, 116]] // folders for sequence 3
 		]
 	}
 };
+
 
 UplEditor.prototype.getParamsFromUplFile = function() {
 	// 未完成

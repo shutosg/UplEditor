@@ -21,6 +21,17 @@ function readFile(e) {
 	ue = new UplEditor(file);
 }
 
+document.getElementById("v1_start").addEventListener("click", function(){
+	ue = new UplEditor(false, "variable1");
+}, false);
+document.getElementById("v2_start").addEventListener("click", function(){
+	ue = new UplEditor(false, "variable2");
+}, false);
+
 document.getElementById("dl_upl").addEventListener("click", function(){
-	ue.downloadXml(ue.domToXml(ue.exDom), "output.upl");
+	if (typeof ue !== "undefined") {
+		ue.downloadXml(ue.domToXml(ue.exDom), "output.upl");
+		return;
+	}
+	alert("UplEditorインスタンスが未生成です。");
 }, false);
